@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -40,7 +39,7 @@ model MediaItem {
   title     String
   type      MediaType
   status    MediaStatus @default(WANT_TO_WATCH)
-  rating    Int?        @db.SmallInt
+  rating    Int?
   notes     String?
   coverUrl  String?
   createdAt DateTime    @default(now())
@@ -48,6 +47,7 @@ model MediaItem {
   userId    String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([title, userId])
   @@map("media_items")
 }
 

@@ -91,8 +91,8 @@ export class MediaService {
       where: {
         userId,
         OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { notes: { contains: query, mode: 'insensitive' } },
+          { title: { contains: query } },
+          { notes: { contains: query } },
         ],
       },
       orderBy: { createdAt: 'desc' },
