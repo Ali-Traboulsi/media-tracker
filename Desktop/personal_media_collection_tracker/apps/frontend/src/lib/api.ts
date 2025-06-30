@@ -37,14 +37,14 @@ class ApiService {
   });
 
   constructor() {
-    // Add auth token to requests
-    this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    });
+    // No authentication needed for demo
+    // this.api.interceptors.request.use((config) => {
+    //   const token = localStorage.getItem('token');
+    //   if (token) {
+    //     config.headers.Authorization = `Bearer ${token}`;
+    //   }
+    //   return config;
+    // });
   }
 
   // Auth endpoints
