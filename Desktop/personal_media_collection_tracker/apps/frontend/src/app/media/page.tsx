@@ -44,9 +44,10 @@ export default function MediaPage() {
     try {
       setLoading(true);
       const items = await apiService.getMediaItems(selectedType, selectedStatus);
-      setMediaItems(items);
+      setMediaItems(Array.isArray(items) ? items : []);
     } catch (error) {
       console.error('Failed to fetch media items:', error);
+      setMediaItems([]); // Set empty array on error
     } finally {
       setLoading(false);
     }

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,48 +9,45 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+  id         String      @id @default(uuid())
+  email      String      @unique
+  name       String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  avatar     String?
   accounts   Account[]
   mediaItems MediaItem[]
-  
+
   @@map("users")
 }
 
 model Account {
   id        String   @id @default(uuid())
   userId    String
-  type      String   // "credentials", "google", "github", etc.
-  provider  String   // "credentials", "google", "github", etc.
-  password  String?  // Only for credentials type
+  type      String
+  provider  String
+  password  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, userId])
   @@map("accounts")
 }
 
 model MediaItem {
-  id          String     @id @default(uuid())
-  title       String
-  type        MediaType
-  status      MediaStatus @default(WANT_TO_WATCH)
-  rating      Int?       @db.SmallInt
-  notes       String?
-  coverUrl    String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  
-  userId      String
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id        String      @id @default(uuid())
+  title     String
+  type      MediaType
+  status    MediaStatus @default(WANT_TO_WATCH)
+  rating    Int?        @db.SmallInt
+  notes     String?
+  coverUrl  String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("media_items")
 }
 

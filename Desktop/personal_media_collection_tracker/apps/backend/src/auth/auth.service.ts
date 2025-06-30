@@ -41,8 +41,19 @@ export class AuthService {
       data: {
         email,
         name,
-        password
-          },
+        accounts: {
+          create: [
+            {
+            type: 'credentials',
+              provider: 'credentials',
+              password: hashedPassword,
+            },
+          ],
+        },
+      },
+      include: {
+        accounts: true,
+      },
     });
 
     // Generate JWT token
@@ -65,14 +76,21 @@ export class AuthService {
     // Find user with credentials account
     const user = await this.prisma.user.findUnique({
       where: { email },
+        include: {
+            accounts: {
+            where: { provider: 'credentials' },
+            select: { password: true },
+            },
+        },
     });
 
-    if (!user || !user.password) {
+    if (!user || !user.accounts || user.accounts.length === 0) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Check password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const accountPassword = user.accounts[0].password ?? '';
+    const isPasswordValid = await bcrypt.compare(password, accountPassword);
     
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
